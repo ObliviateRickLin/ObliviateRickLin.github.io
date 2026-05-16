@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jinrui Lin</title>
+<meta name="description" content="Jinrui Lin — agent engineer at Tencent, currently in Los Angeles." />
+<link rel="icon" href="https://avatars.githubusercontent.com/u/83101411?v=4" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f7f4ee;
+    --paper-2: #efeadf;
+    --ink: #1a1815;
+    --ink-2: #4a463f;
+    --ink-3: #8a857c;
+    --rule: #d8d2c4;
+    --mark: #b13a1e;
+    --mark-soft: rgba(177, 58, 30, .14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(0,0,0,.012) 0, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0,0,0,.012) 0, transparent 50%);
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 56px 28px 80px;
+  }
+
+  /* ---- top status strip ---- */
+  .top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--ink-3);
+    margin-bottom: 80px;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .top .live::before {
+    content: ""; display: inline-block; width: 5px; height: 5px;
+    background: var(--mark); border-radius: 50%; margin-right: 7px;
+    vertical-align: 2px;
+  }
+  .top .links a { color: var(--ink-3); text-decoration: none; margin-left: 14px; }
+  .top .links a:hover { color: var(--ink); }
+
+  /* ---- hero ---- */
+  h1.name {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 84px; font-weight: 400;
+    letter-spacing: -.02em; line-height: .95;
+    margin-bottom: 14px;
+  }
+  h1.name .dot { color: var(--mark); }
+
+  .where {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 24px;
+    color: var(--ink-2);
+    margin-bottom: 56px;
+  }
+
+  p {
+    margin-bottom: 22px;
+    color: var(--ink);
+  }
+  p.muted { color: var(--ink-2); }
+
+  a.link {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink-3);
+    padding-bottom: 1px;
+    transition: border-color .15s;
+  }
+  a.link:hover { border-color: var(--mark); color: var(--mark); }
+
+  em { font-style: italic; }
+  strong { font-weight: 600; }
+
+  /* ---- section header ---- */
+  h2.sec {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 28px; font-weight: 400;
+    color: var(--ink);
+    margin: 56px 0 18px;
+    letter-spacing: -.01em;
+  }
+  h2.sec::before {
+    content: "§ ";
+    color: var(--mark);
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    vertical-align: 4px;
+    margin-right: 6px;
+  }
+
+  /* ---- now block ---- */
+  .now {
+    border-left: 2px solid var(--mark);
+    padding: 4px 0 4px 18px;
+    margin: 14px 0 22px;
+  }
+  .now p { margin-bottom: 14px; font-size: 16px; color: var(--ink-2); }
+  .now p:last-child { margin-bottom: 0; }
+
+  /* ---- harness-as-map figure (inside Now) ---- */
+  .harness-map { margin: 16px 0 22px; }
+  .harness-map svg { width: 100%; height: auto; display: block; }
+  .harness-map figcaption {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic; font-size: 14.5px;
+    color: var(--ink-3);
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  /* ---- margin / aside notes ---- */
+  .margin-note {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    padding: 10px 0 10px 18px;
+    border-left: 1px solid var(--rule);
+    margin: 18px 0 24px;
+    max-width: 90%;
+  }
+  .margin-note::before {
+    content: "↳ ";
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    color: var(--mark);
+    margin-right: 4px;
+  }
+
+  /* ---- city timeline ---- */
+  .citymap {
+    margin: 18px 0 28px;
+    padding: 22px 4px 14px;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+  }
+  .citymap-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic; font-size: 18px;
+    color: var(--ink-2); margin-bottom: 14px;
+  }
+  .citymap svg { width: 100%; height: auto; display: block; }
+  .citymap .legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--ink-3);
+  }
+  .citymap .legend span::before {
+    content: ""; display: inline-block; width: 10px; height: 6px;
+    margin-right: 6px; vertical-align: middle;
+  }
+  .citymap .legend .study::before { background: var(--ink-2); }
+  .citymap .legend .work::before  { background: var(--mark); }
+
+  /* ---- github heatmap ---- */
+  .gh-activity {
+    margin: 24px 0 28px;
+    padding: 22px 4px 16px;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+  }
+  .gh-activity .gh-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic; font-size: 18px;
+    color: var(--ink-2); margin-bottom: 14px;
+  }
+  .gh-activity a { display: block; }
+  .gh-activity img { width: 100%; height: auto; display: block; opacity: .95; }
+  .gh-activity .gh-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--ink-3);
+    margin-top: 10px; text-align: right;
+  }
+
+  /* ---- project list ---- */
+  ol.work { list-style: none; counter-reset: w; margin-top: 8px; }
+  ol.work li {
+    counter-increment: w;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 12px;
+    align-items: baseline;
+  }
+  ol.work li:last-child { border-bottom: 1px solid var(--rule); }
+  ol.work li::before {
+    content: counter(w, decimal-leading-zero);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    padding-top: 4px;
+  }
+  ol.work .title { font-weight: 600; }
+  ol.work .title a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; }
+  ol.work .title a:hover { border-bottom-color: var(--mark); color: var(--mark); }
+  ol.work .meta { color: var(--ink-3); font-size: 14px; }
+  ol.work .desc {
+    grid-column: 2 / 4;
+    font-size: 15px;
+    color: var(--ink-2);
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+
+  /* ---- cv timeline ---- */
+  dl.cv { margin-top: 4px; }
+  dl.cv .row {
+    display: grid; grid-template-columns: 120px 1fr; gap: 24px;
+    padding: 12px 0; border-top: 1px solid var(--rule);
+  }
+  dl.cv .row:last-child { border-bottom: 1px solid var(--rule); }
+  dl.cv dt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; color: var(--ink-3);
+    padding-top: 4px;
+  }
+  dl.cv dd .role { font-weight: 600; margin-bottom: 2px; }
+  dl.cv dd .org { color: var(--ink-2); font-size: 15px; }
+
+  /* ---- aside note (closing) ---- */
+  .aside-note {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    color: var(--ink-3);
+    font-size: 18px;
+    margin: 28px 0;
+    padding-left: 22px;
+    border-left: 1px solid var(--rule);
+  }
+
+  /* ---- foot ---- */
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  footer a { color: var(--ink-3); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  ::selection { background: var(--mark); color: var(--paper); }
+
+  @media (max-width: 520px) {
+    h1.name { font-size: 60px; }
+    .where { font-size: 20px; }
+    .top { margin-bottom: 56px; }
+    dl.cv .row { grid-template-columns: 100px 1fr; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="top">
+    <span class="live" id="liveTime">loading…</span>
+    <span class="links">
+      <a href="https://github.com/ObliviateRickLin">github</a>
+      <a href="https://www.linkedin.com/in/jinrui-l-902467283/">linkedin</a>
+      <a href="mailto:jinruilin@g.ucla.edu">email</a>
+    </span>
+  </div>
+
+  <h1 class="name">Jinrui Lin<span class="dot">.</span></h1>
+  <div class="where">Agent engineer at Tencent, writing this from Los Angeles.</div>
+
+  <p>
+    I spend most of my time building agents — the kind that actually run
+    in production, not the kind that look pretty in a demo video.
+    Right now that means a harness-driven multi-agent system at Tencent's
+    ad department in Shenzhen — I first interned there last summer, then
+    came back for a second round earlier this May.
+  </p>
+
+  <p>
+    Before that I cofounded a small AI company in Hong Kong called AIJobTech,
+    grew it to a few thousand weekly users on a multi-agent LangChain backend,
+    and learned the hard way that retention is harder than launch.
+    I'm finishing a stats &amp; data-science MS at UCLA next summer.
+  </p>
+
+  <p class="muted">
+    I write code in Python and C++, think in PyTorch, and spend a lot of evenings
+    reading papers about how agents plan, reason, and use tools.
+  </p>
+
+  <h2 class="sec">Now</h2>
+
+  <div class="now">
+    <p>
+      At Tencent the project started as a plain LangGraph workflow and
+      has turned into a harness-driven multi-agent system that lives inside
+      the ad database. Roughly the territory it covers today:
+    </p>
+
+    <figure class="harness-map">
+      <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" aria-label="the agent harness as a territory map">
+        <!-- island outline -->
+        <path d="M 50 80 C 50 55, 80 40, 120 45 C 165 35, 220 38, 260 48 C 305 38, 365 45, 410 60 C 445 70, 455 105, 430 138 C 395 158, 340 155, 295 148 C 240 156, 180 152, 130 146 C 80 142, 45 120, 48 95 C 48 88, 49 84, 50 80 Z"
+              fill="#f7f4ee" stroke="#1a1815" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+
+        <!-- coast wave marks -->
+        <g stroke="#8a857c" stroke-width="0.5" fill="none">
+          <path d="M 32 90 C 28 88, 26 90, 30 93"/>
+          <path d="M 120 30 C 118 27, 122 26, 124 30"/>
+          <path d="M 260 33 C 259 30, 263 30, 264 33"/>
+          <path d="M 410 50 C 412 47, 416 49, 414 52"/>
+          <path d="M 460 110 C 463 109, 464 113, 461 114"/>
+          <path d="M 295 162 C 297 165, 293 167, 291 164"/>
+          <path d="M 130 160 C 128 163, 124 162, 126 159"/>
+        </g>
+
+        <!-- dashed agent paths between regions -->
+        <g stroke="#8a857c" stroke-width="0.6" fill="none" stroke-dasharray="2.5 2.5">
+          <path d="M 120 80 Q 175 65, 232 72"/>
+          <path d="M 250 75 Q 305 70, 355 85"/>
+          <path d="M 115 90 Q 150 110, 198 124"/>
+          <path d="M 358 90 Q 290 110, 212 126"/>
+        </g>
+
+        <!-- region markers + labels -->
+        <g font-family="JetBrains Mono, monospace" font-size="11.5" fill="#1a1815">
+          <circle cx="110" cy="80" r="3.2" fill="#b13a1e"/>
+          <text x="118" y="84">analyst Q&amp;A</text>
+
+          <circle cx="240" cy="72" r="3.2" fill="#b13a1e"/>
+          <text x="248" y="76">table discovery</text>
+
+          <circle cx="360" cy="85" r="3.2" fill="#b13a1e"/>
+          <text x="368" y="89">lineage tracing</text>
+
+          <circle cx="200" cy="125" r="3.2" fill="#b13a1e"/>
+          <text x="208" y="129">…and more</text>
+        </g>
+
+        <!-- compass rose -->
+        <g transform="translate(440, 60)">
+          <circle r="10" fill="#f7f4ee" stroke="#1a1815" stroke-width="0.7"/>
+          <polygon points="0,-9 2,0 0,9 -2,0" fill="#1a1815"/>
+          <polygon points="-9,0 0,-2 9,0 0,2" fill="#8a857c"/>
+          <text x="0" y="-13" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#8a857c">N</text>
+        </g>
+
+        <!-- ocean inscription -->
+        <text x="240" y="192" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="13" fill="#8a857c">— beyond the harness, here be dragons —</text>
+      </svg>
+      <figcaption>the harness, drawn as territory</figcaption>
+    </figure>
+
+    <p>
+      What keeps surprising me is that the system prompt is mostly this map
+      — a description of where the agent is allowed to wander.
+      The harness <em>is</em> the map.
+    </p>
+    <p>
+      We're now adding a <em>dreaming</em> module: the agents reflect on the day's
+      transcripts while we sleep and propose their own prompt edits.
+      Curious whether they wake up smarter or just more confused.
+    </p>
+    <p>
+      Still chipping away at AIJobTech on weekends with my cofounder.
+      The matching layer keeps getting rewritten as the agent frameworks mature.
+    </p>
+    <p>
+      Quietly looking for full-time agent-engineering roles starting after
+      I graduate in June.
+    </p>
+  </div>
+
+  <h2 class="sec">Where I've been</h2>
+
+  <div class="citymap">
+    <div class="citymap-title">six years across four cities</div>
+    <svg viewBox="-40 0 480 132" preserveAspectRatio="xMinYMin meet" aria-hidden="true">
+      <!-- city skyline icons (left of labels) -->
+      <!-- Shenzhen: sparse modern skyline, dramatic Ping An spire + KK100 crown -->
+      <g transform="translate(-38, 12)" fill="#8a857c">
+        <rect x="0" y="9" width="3" height="5"/>
+        <rect x="4" y="6" width="3" height="8"/>
+        <!-- Ping An: very tall tapered spire with antenna poking through top -->
+        <polygon points="10,1 11.3,1 12.3,14 9,14"/>
+        <line x1="10.65" y1="-1" x2="10.65" y2="1" stroke="#8a857c" stroke-width="0.7" stroke-linecap="round"/>
+        <!-- KK100: stepped crown -->
+        <rect x="15" y="4" width="3" height="10"/>
+        <rect x="15.5" y="2.5" width="2" height="1.5"/>
+        <rect x="16" y="1" width="1" height="1.5"/>
+        <!-- two clean boxes on the right -->
+        <rect x="20" y="7" width="3" height="7"/>
+        <rect x="24" y="9" width="3" height="5"/>
+      </g>
+      <!-- Beijing: three-tier pagoda -->
+      <g transform="translate(-38, 36)" fill="#8a857c">
+        <rect x="13" y="0" width="0.8" height="2"/>
+        <polygon points="9,4 11,2 15,2 17,4"/>
+        <rect x="11" y="4" width="4" height="1.5"/>
+        <polygon points="5,8 8,6 18,6 21,8"/>
+        <rect x="7" y="8" width="12" height="2"/>
+        <polygon points="0,12 4,10 22,10 26,12"/>
+        <rect x="2" y="12" width="22" height="2"/>
+      </g>
+      <!-- Hong Kong: dense varied skyline + harbor waterline -->
+      <g transform="translate(-38, 60)" fill="#8a857c">
+        <rect x="0"  y="9"  width="1.5" height="3"/>
+        <rect x="2"  y="6"  width="1.5" height="6"/>
+        <!-- BOC: asymmetric triangular silhouette -->
+        <polygon points="4.5,2 7,2 8,12 4.5,12"/>
+        <rect x="9" y="5" width="1.5" height="7"/>
+        <!-- IFC: stepped wedding-cake (tallest) -->
+        <rect x="11.5" y="1" width="2.5" height="11"/>
+        <rect x="11" y="3" width="3.5" height="1.5"/>
+        <!-- dense varied buildings -->
+        <rect x="15.5" y="6" width="1.5" height="6"/>
+        <rect x="17.5" y="4" width="1.5" height="8"/>
+        <rect x="19.5" y="7" width="1.5" height="5"/>
+        <rect x="21.5" y="5" width="1.5" height="7"/>
+        <rect x="23.5" y="9" width="1.5" height="3"/>
+        <rect x="25.5" y="6" width="1.5" height="6"/>
+        <rect x="27.5" y="8" width="1.5" height="4"/>
+        <!-- wavy harbor line -->
+        <path d="M 0 13.4 Q 3 12.9, 6 13.4 T 12 13.4 T 18 13.4 T 24 13.4 T 28 13.4"
+              stroke="#8a857c" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+      </g>
+      <!-- Los Angeles: short skyline + palm -->
+      <g transform="translate(-38, 84)">
+        <g fill="#8a857c">
+          <rect x="0" y="9" width="2" height="5"/>
+          <rect x="3" y="6" width="2" height="8"/>
+          <circle cx="7" cy="3" r="1.5"/>
+          <rect x="6" y="3" width="2.5" height="11"/>
+          <rect x="10" y="7" width="2" height="7"/>
+          <rect x="13" y="9" width="2" height="5"/>
+        </g>
+        <g stroke="#8a857c" stroke-width="0.8" fill="none" stroke-linecap="round">
+          <line x1="22" y1="14" x2="22" y2="7"/>
+          <path d="M 22 7 Q 19 6, 18 7.5"/>
+          <path d="M 22 7 Q 25 6, 26 7.5"/>
+          <path d="M 22 7 Q 20 5, 19 4"/>
+          <path d="M 22 7 Q 24 5, 25 4"/>
+          <circle cx="22" cy="7" r="0.7" fill="#8a857c"/>
+        </g>
+      </g>
+
+      <!-- horizontal grid lines -->
+      <line x1="92" y1="20" x2="430" y2="20" stroke="#d8d2c4" stroke-width="0.5"/>
+      <line x1="92" y1="44" x2="430" y2="44" stroke="#d8d2c4" stroke-width="0.5"/>
+      <line x1="92" y1="68" x2="430" y2="68" stroke="#d8d2c4" stroke-width="0.5"/>
+      <line x1="92" y1="92" x2="430" y2="92" stroke="#d8d2c4" stroke-width="0.5"/>
+
+      <!-- city labels -->
+      <text x="84" y="24" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="11" fill="#4a463f">Shenzhen</text>
+      <text x="84" y="48" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="11" fill="#4a463f">Beijing</text>
+      <text x="84" y="72" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="11" fill="#4a463f">Hong Kong</text>
+      <text x="84" y="96" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="11" fill="#4a463f">Los Angeles</text>
+
+      <!-- Shenzhen: CUHKSZ 2020-2024 (study, dark gray) -->
+      <rect x="100" y="14" width="186" height="12" fill="#4a463f" rx="2"/>
+      <!-- Shenzhen: Tencent round 1 (summer 2025) -->
+      <rect x="355" y="14" width="20" height="12" fill="#b13a1e" rx="2"/>
+      <!-- Shenzhen: Tencent round 2 (May 2026 - now) -->
+      <rect x="415" y="14" width="15" height="12" fill="#b13a1e" rx="2"/>
+      <!-- Beijing: Didi winter 2022-23 -->
+      <rect x="225" y="38" width="34" height="12" fill="#b13a1e" rx="2"/>
+      <!-- Hong Kong: AIJobTech 2023-now -->
+      <rect x="240" y="62" width="190" height="12" fill="#b13a1e" rx="2" opacity=".85"/>
+      <!-- LA: UCLA 2024-2026 -->
+      <rect x="285" y="86" width="145" height="12" fill="#4a463f" rx="2"/>
+
+      <!-- year ticks -->
+      <line x1="100" y1="110" x2="100" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+      <line x1="148" y1="110" x2="148" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+      <line x1="195" y1="110" x2="195" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+      <line x1="243" y1="110" x2="243" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+      <line x1="290" y1="110" x2="290" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+      <line x1="338" y1="110" x2="338" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+      <line x1="385" y1="110" x2="385" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+      <line x1="430" y1="110" x2="430" y2="114" stroke="#8a857c" stroke-width="0.6"/>
+
+      <text x="100" y="126" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a857c" text-anchor="middle">2020</text>
+      <text x="148" y="126" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a857c" text-anchor="middle">'21</text>
+      <text x="195" y="126" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a857c" text-anchor="middle">'22</text>
+      <text x="243" y="126" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a857c" text-anchor="middle">'23</text>
+      <text x="290" y="126" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a857c" text-anchor="middle">'24</text>
+      <text x="338" y="126" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a857c" text-anchor="middle">'25</text>
+      <text x="385" y="126" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a857c" text-anchor="middle">'26</text>
+
+      <!-- "you are here" marker -->
+      <line x1="430" y1="8" x2="430" y2="106" stroke="#b13a1e" stroke-width="0.6" stroke-dasharray="2 2"/>
+      <text x="430" y="6" font-family="JetBrains Mono, monospace" font-size="9" fill="#b13a1e" text-anchor="end">now</text>
+    </svg>
+    <div class="legend">
+      <span class="study">study</span>
+      <span class="work">work / build</span>
+    </div>
+  </div>
+
+  <dl class="cv">
+    <div class="row">
+      <dt>'25 · '26 — now</dt>
+      <dd>
+        <div class="role">ML Intern, Tencent CDG · Advertisement Department</div>
+        <div class="org">Harness-driven multi-agent system on the ad database — analyst Q&amp;A, table discovery, lineage tracing. Started from raw LangGraph; now adding a dreaming module. Shenzhen.</div>
+      </dd>
+    </div>
+    <div class="row">
+      <dt>2023 — now</dt>
+      <dd>
+        <div class="role">Cofounder &amp; VP, AIJobTech</div>
+        <div class="org">Multi-agent job-matching product. HK govt IDEATION grant. 5K weekly users at peak. Hong Kong.</div>
+      </dd>
+    </div>
+    <div class="row">
+      <dt>2024 — 2026</dt>
+      <dd>
+        <div class="role">MS Statistics &amp; Data Science, UCLA</div>
+        <div class="org">With scholarship. Working with the Hoffman2 cluster more than I'd like.</div>
+      </dd>
+    </div>
+    <div class="row">
+      <dt>2022 — 2023</dt>
+      <dd>
+        <div class="role">Algorithm Intern, Didi Self-Driving</div>
+        <div class="org">LoRA-fine-tuned a multimodal driving model on RSS safety signals. Beijing.</div>
+      </dd>
+    </div>
+    <div class="row">
+      <dt>2022</dt>
+      <dd>
+        <div class="role">ML Intern, Momenta × BYD</div>
+        <div class="org">Auto-encoder clustering on real traffic data. Shenzhen.</div>
+      </dd>
+    </div>
+    <div class="row">
+      <dt>2020 — 2024</dt>
+      <dd>
+        <div class="role">BS Data Science, CUHK Shenzhen</div>
+        <div class="org">Dean's List.</div>
+      </dd>
+    </div>
+  </dl>
+
+  <div class="margin-note">
+    Crossing the Pacific in 2024 was the biggest jump on this chart — five hours of daylight that disappear, twelve time zones, an entire stack of conventions to relearn.
+  </div>
+
+  <div class="gh-activity">
+    <div class="gh-title">twelve months on github</div>
+    <a href="https://github.com/ObliviateRickLin" target="_blank" rel="noopener" aria-label="ObliviateRickLin on GitHub">
+      <img src="gh-heatmap.svg" alt="GitHub contribution heatmap for @ObliviateRickLin" loading="lazy"/>
+    </a>
+    <div class="gh-caption">most of my code lives behind firewalls — this is what leaks out</div>
+  </div>
+
+  <h2 class="sec">Reach me</h2>
+
+  <p>
+    The fastest way is <a class="link" href="mailto:jinruilin@g.ucla.edu">jinruilin@g.ucla.edu</a>.
+    I read everything, even cold ones — especially if you're working on
+    agent infrastructure, tool-use, or anything in that neighborhood.
+  </p>
+
+  <p class="muted">
+    Also reachable on
+    <a class="link" href="https://github.com/ObliviateRickLin" target="_blank" rel="noopener">GitHub</a>
+    and <a class="link" href="https://www.linkedin.com/in/jinrui-l-902467283/" target="_blank" rel="noopener">LinkedIn</a>.
+    I don't tweet much.
+  </p>
+
+  <p class="aside-note">
+    If you wandered here from a job listing — yes, I'm graduating June 2026,
+    and yes, I need visa sponsorship. The short version is on
+    my <a class="link" href="https://github.com/ObliviateRickLin">GitHub</a>;
+    the long version is over coffee.
+  </p>
+
+  <footer>
+    <span>last touched <span id="lastTouch">2026-05-16</span></span>
+    <span>made by hand · <span id="elapsed">a Friday</span> in los angeles</span>
+  </footer>
+
+</div>
+
+<script>
+  function fmtTime() {
+    const opts = { timeZone: 'America/Los_Angeles', weekday: 'long', hour: 'numeric', minute: '2-digit', hour12: true };
+    const parts = new Intl.DateTimeFormat('en-US', opts).formatToParts(new Date());
+    const get = t => parts.find(p => p.type === t)?.value || '';
+    const weekday = get('weekday');
+    const hour = get('hour');
+    const minute = get('minute');
+    const ampm = get('dayPeriod');
+    const hr24 = new Date().toLocaleString('en-US', { hour12: false, hour: 'numeric', timeZone: 'America/Los_Angeles' });
+    const h = parseInt(hr24, 10);
+    let flavor = 'afternoon';
+    if (h < 5) flavor = 'late night';
+    else if (h < 12) flavor = 'morning';
+    else if (h < 17) flavor = 'afternoon';
+    else if (h < 21) flavor = 'evening';
+    else flavor = 'night';
+    return `${weekday.toLowerCase()} ${flavor}, ${hour}:${minute} ${ampm.toLowerCase()} in LA`;
+  }
+  function tick() {
+    const el = document.getElementById('liveTime');
+    if (el) el.textContent = fmtTime();
+    const el2 = document.getElementById('elapsed');
+    if (el2) {
+      const wkday = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'America/Los_Angeles' }).format(new Date());
+      el2.textContent = 'a ' + wkday;
+    }
+  }
+  tick();
+  setInterval(tick, 30000);
+</script>
+
+</body>
+</html>

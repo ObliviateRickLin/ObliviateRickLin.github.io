@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jinrui Lin — Agent Engineer @ Tencent</title>
+<meta name="description" content="Jinrui Lin (RickLin) — Agent engineer at Tencent CDG. Building multi-agent LangGraph systems in production." />
+<link rel="icon" href="https://avatars.githubusercontent.com/u/83101411?v=4" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --ink: #0e0e12;
+    --ink-soft: #3a3a44;
+    --ink-mute: #6b6b78;
+    --line: #e6e6ec;
+
+    /* Bento card palette — Apple-inspired pastels */
+    --c-hero: #0e0e12;
+    --c-hero-fg: #fafafa;
+    --c-now: #ff7ac6;
+    --c-now-fg: #1a0410;
+    --c-agent: #1e1b4b;
+    --c-agent-fg: #e0e7ff;
+    --c-research: #fff4b8;
+    --c-research-fg: #1a1404;
+    --c-startup: #c4f1d4;
+    --c-startup-fg: #04200c;
+    --c-stats: #d4dbff;
+    --c-stats-fg: #08103a;
+    --c-loc: #ffdab8;
+    --c-loc-fg: #2a1604;
+    --c-proj: #ffffff;
+    --c-skill: #f0e8ff;
+    --c-skill-fg: #1a0a3a;
+    --c-edu: #d9f5ff;
+    --c-edu-fg: #042438;
+    --c-past: #fafafa;
+    --c-cta: #6a3eff;
+    --c-cta-fg: #ffffff;
+
+    --r: 28px;
+    --r-sm: 14px;
+    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 28px -12px rgba(0,0,0,.12);
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0e;
+    --ink: #f5f5f7;
+    --ink-soft: #c8c8d0;
+    --ink-mute: #8a8a98;
+    --line: #1f1f28;
+    --c-proj: #15151c;
+    --c-past: #15151c;
+    --c-research: #2a230a;
+    --c-research-fg: #fff4b8;
+    --c-startup: #0a2614;
+    --c-startup-fg: #c4f1d4;
+    --c-stats: #14195e;
+    --c-stats-fg: #d4dbff;
+    --c-loc: #2e1c08;
+    --c-loc-fg: #ffdab8;
+    --c-skill: #1d1238;
+    --c-skill-fg: #e8ddff;
+    --c-edu: #08283a;
+    --c-edu-fg: #b9e8ff;
+    --c-now: #4d1238;
+    --c-now-fg: #ffd2eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    transition: background .3s ease, color .3s ease;
+  }
+  .mono, code { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    max-width: 1240px; margin: 0 auto; padding: 22px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+  .brand-dot {
+    width: 28px; height: 28px; border-radius: 9px; background: var(--ink); color: var(--bg);
+    display: grid; place-items: center; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  }
+  .top-actions { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    background: transparent; border: 1px solid var(--line); color: var(--ink);
+    width: 38px; height: 38px; border-radius: 12px; cursor: pointer;
+    display: grid; place-items: center; transition: all .15s ease;
+  }
+  .icon-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* ---------- Bento grid ---------- */
+  .bento {
+    max-width: 1240px; margin: 0 auto; padding: 8px 28px 80px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    gap: 16px;
+  }
+  .card {
+    border-radius: var(--r);
+    padding: 28px;
+    background: var(--c-proj);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,.06), 0 18px 48px -16px rgba(0,0,0,.2); }
+  .card-link { cursor: pointer; }
+
+  /* tiny label at top of each card */
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500; letter-spacing: .08em;
+    text-transform: uppercase; opacity: .55;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 18px;
+  }
+  .label::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+  }
+
+  /* ---------- Grid placement ---------- */
+  .b-hero    { grid-column: span 7; grid-row: span 3; background: var(--c-hero); color: var(--c-hero-fg); padding: 36px; }
+  .b-now     { grid-column: span 5; grid-row: span 2; background: var(--c-now); color: var(--c-now-fg); }
+  .b-status  { grid-column: span 5; grid-row: span 1; background: var(--c-agent); color: var(--c-agent-fg); }
+
+  .b-agent   { grid-column: span 4; grid-row: span 2; background: var(--c-agent); color: var(--c-agent-fg); }
+  .b-startup { grid-column: span 4; grid-row: span 2; background: var(--c-startup); color: var(--c-startup-fg); }
+  .b-research{ grid-column: span 4; grid-row: span 2; background: var(--c-research); color: var(--c-research-fg); }
+
+  .b-projects{ grid-column: span 8; grid-row: span 3; background: var(--c-proj); }
+  .b-stats   { grid-column: span 4; grid-row: span 1; background: var(--c-stats); color: var(--c-stats-fg); }
+  .b-edu     { grid-column: span 4; grid-row: span 1; background: var(--c-edu); color: var(--c-edu-fg); }
+  .b-past    { grid-column: span 4; grid-row: span 1; background: var(--c-past); }
+
+  .b-skills  { grid-column: span 7; grid-row: span 2; background: var(--c-skill); color: var(--c-skill-fg); }
+  .b-loc     { grid-column: span 5; grid-row: span 2; background: var(--c-loc); color: var(--c-loc-fg); }
+
+  .b-cta     { grid-column: span 12; grid-row: span 1; background: var(--c-cta); color: var(--c-cta-fg); }
+
+  @media (max-width: 1080px) {
+    .b-hero, .b-now, .b-status, .b-agent, .b-startup, .b-research,
+    .b-projects, .b-stats, .b-edu, .b-past, .b-skills, .b-loc, .b-cta {
+      grid-column: span 12;
+      grid-row: auto;
+    }
+  }
+  @media (min-width: 1080px) and (max-width: 1280px) {
+    .b-hero    { grid-column: span 7; grid-row: span 3; }
+    .b-now     { grid-column: span 5; grid-row: span 2; }
+    .b-status  { grid-column: span 5; grid-row: span 1; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero-head {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+  }
+  .avatar {
+    width: 64px; height: 64px; border-radius: 18px;
+    background: #fff; padding: 3px; flex-shrink: 0;
+  }
+  .avatar img { width: 100%; height: 100%; border-radius: 16px; object-fit: cover; display: block; }
+  .hero-meta { display: flex; flex-direction: column; gap: 2px; }
+  .hero-name { font-size: 17px; font-weight: 700; }
+  .hero-handle { font-family: 'JetBrains Mono', monospace; font-size: 13px; opacity: .6; }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 4.8vw, 3.6rem);
+    font-weight: 800; letter-spacing: -.025em; line-height: 1.02;
+    margin-bottom: 22px;
+  }
+  .hero-title em { font-style: normal; color: #ff7ac6; }
+  .hero-title .dim { opacity: .42; }
+
+  .hero-desc { font-size: 16px; opacity: .72; max-width: 560px; margin-bottom: 28px; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    padding: 7px 14px; border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    font-size: 12.5px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; box-shadow: 0 0 0 4px rgba(52,211,153,.18); }
+
+  /* ---------- NOW card (Tencent) ---------- */
+  .now-logo {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 999px;
+    background: rgba(0,0,0,.08); font-weight: 600; font-size: 12.5px;
+    margin-bottom: 18px;
+  }
+  .now-title { font-size: 24px; font-weight: 700; line-height: 1.15; margin-bottom: 8px; letter-spacing: -.01em; }
+  .now-sub { font-size: 14.5px; opacity: .72; margin-bottom: 22px; }
+  .now-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .now-bullets li {
+    font-size: 13.5px; line-height: 1.5; padding-left: 16px; position: relative; opacity: .92;
+  }
+  .now-bullets li::before {
+    content: "→"; position: absolute; left: 0; font-weight: 700;
+  }
+  .now-bullets li strong { font-weight: 700; }
+
+  /* ---------- STATUS card ---------- */
+  .b-status { display: flex; flex-direction: column; justify-content: space-between; }
+  .status-line { font-size: 17px; font-weight: 600; line-height: 1.35; letter-spacing: -.005em; }
+  .status-arrow {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.1); display: grid; place-items: center;
+    align-self: flex-end;
+    transition: transform .3s ease;
+  }
+  .b-status:hover .status-arrow { transform: translate(4px, -4px); background: rgba(255,255,255,.2); }
+
+  /* ---------- AGENT stack card ---------- */
+  .agent-big {
+    font-size: 56px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 12px 0 6px;
+  }
+  .agent-sub { font-size: 13px; opacity: .65; margin-bottom: 18px; }
+  .agent-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .agent-chips span {
+    padding: 5px 10px; border-radius: 8px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+  }
+
+  /* ---------- STARTUP card ---------- */
+  .startup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  .startup-stat .v { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .startup-stat .k { font-size: 11.5px; opacity: .65; margin-top: 4px; font-family: 'JetBrains Mono', monospace; letter-spacing: .04em; text-transform: uppercase; }
+  .startup-title { font-size: 22px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 4px; }
+  .startup-desc { font-size: 13.5px; opacity: .72; }
+
+  /* ---------- RESEARCH card ---------- */
+  .research-title { font-size: 22px; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; margin-bottom: 10px; }
+  .research-desc { font-size: 13.5px; opacity: .72; margin-bottom: 14px; }
+  .research-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .research-tags span {
+    padding: 4px 10px; border-radius: 999px;
+    background: rgba(0,0,0,.08); font-size: 11.5px; font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---------- PROJECTS card ---------- */
+  .proj-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .proj-title-l { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  .proj-link-r {
+    font-size: 13px; opacity: .65; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .proj-link-r:hover { opacity: 1; }
+  .proj-list { display: flex; flex-direction: column; }
+  .proj-row {
+    display: grid; grid-template-columns: 1.6fr 2fr auto;
+    gap: 16px; padding: 14px 0;
+    border-top: 1px solid var(--line);
+    align-items: center;
+    transition: all .15s ease;
+  }
+  .proj-row:first-child { border-top: none; padding-top: 4px; }
+  .proj-row:hover { padding-left: 6px; }
+  .proj-name-c { display: flex; flex-direction: column; gap: 2px; }
+  .proj-name-c .nm { font-weight: 600; font-size: 14.5px; }
+  .proj-name-c .lg { font-size: 11.5px; opacity: .55; font-family: 'JetBrains Mono', monospace; }
+  .proj-desc-c { font-size: 13px; opacity: .7; line-height: 1.5; }
+  .proj-meta-c { font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: .55; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .proj-meta-c .arr { transition: transform .2s; }
+  .proj-row:hover .arr { transform: translate(3px, -3px); }
+
+  /* ---------- STATS card ---------- */
+  .b-stats { display: flex; flex-direction: column; justify-content: space-between; }
+  .stat-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .stat-grid-2 .v { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+  .stat-grid-2 .k { font-size: 11px; opacity: .65; font-family: 'JetBrains Mono', monospace; letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
+
+  /* ---------- EDU card ---------- */
+  .edu-row { display: flex; flex-direction: column; gap: 4px; }
+  .edu-school { font-size: 15px; font-weight: 700; letter-spacing: -.005em; }
+  .edu-sub { font-size: 12px; opacity: .65; font-family: 'JetBrains Mono', monospace; }
+
+  /* ---------- PAST card ---------- */
+  .past-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .past-row:first-of-type { border-top: none; padding-top: 4px; }
+  .past-logo {
+    width: 36px; height: 36px; border-radius: 10px; background: var(--ink); color: var(--bg);
+    display: grid; place-items: center; font-weight: 700; font-size: 11px; font-family: 'JetBrains Mono', monospace; flex-shrink: 0;
+  }
+  .past-info .nm { font-size: 13.5px; font-weight: 600; }
+  .past-info .rl { font-size: 11.5px; opacity: .6; font-family: 'JetBrains Mono', monospace; }
+
+  /* ---------- SKILLS card ---------- */
+  .skill-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .skill-group h5 {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace; letter-spacing: .08em;
+    text-transform: uppercase; opacity: .55; margin-bottom: 10px;
+  }
+  .skill-flex { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-tag {
+    padding: 5px 11px; border-radius: 8px;
+    background: rgba(255,255,255,.55); font-size: 12.5px; font-weight: 500;
+  }
+  [data-theme="dark"] .skill-tag { background: rgba(255,255,255,.08); }
+
+  /* ---------- LOCATION card ---------- */
+  .b-loc { display: flex; flex-direction: column; justify-content: space-between; }
+  .loc-big {
+    font-size: clamp(2.2rem, 3.5vw, 3rem); font-weight: 800;
+    letter-spacing: -.025em; line-height: 1.02;
+  }
+  .loc-list { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+  .loc-item { display: flex; align-items: center; gap: 14px; }
+  .loc-flag {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    display: grid; place-items: center; font-size: 22px;
+    background: rgba(0,0,0,.08);
+  }
+  .loc-info .pl { font-size: 14px; font-weight: 600; }
+  .loc-info .pr { font-size: 11.5px; opacity: .65; font-family: 'JetBrains Mono', monospace; }
+
+  /* ---------- CTA card ---------- */
+  .b-cta { display: flex; align-items: center; justify-content: space-between; padding: 36px; gap: 24px; flex-wrap: wrap; }
+  .cta-text { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; max-width: 640px; }
+  .cta-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cta-btn {
+    padding: 14px 22px; border-radius: 14px;
+    background: rgba(255,255,255,.15); color: white;
+    font-weight: 600; font-size: 14px;
+    border: 1px solid rgba(255,255,255,.2);
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all .15s ease;
+  }
+  .cta-btn:hover { background: white; color: var(--c-cta); }
+  .cta-btn.primary { background: white; color: var(--c-cta); }
+  .cta-btn.primary:hover { background: rgba(255,255,255,.85); }
+
+  /* footer */
+  .foot {
+    max-width: 1240px; margin: 0 auto; padding: 0 28px 32px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    color: var(--ink-mute); font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
+  }
+
+  ::selection { background: var(--c-cta); color: white; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="#" class="brand">
+    <span class="brand-dot">JL</span>
+    <span>jinrui.lin</span>
+  </a>
+  <div class="top-actions">
+    <a class="icon-btn" href="https://github.com/ObliviateRickLin" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.7-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+    </a>
+    <a class="icon-btn" href="https://www.linkedin.com/in/jinrui-l-902467283/" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+    </a>
+    <a class="icon-btn" href="mailto:jinruilin@g.ucla.edu" aria-label="Email">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4H2v16h20V4z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </a>
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="bento">
+
+  <!-- ============ HERO ============ -->
+  <section class="card b-hero">
+    <div class="hero-head">
+      <div class="avatar"><img src="https://avatars.githubusercontent.com/u/83101411?v=4" alt="Jinrui Lin" /></div>
+      <div class="hero-meta">
+        <div class="hero-name">Jinrui (Rick) Lin</div>
+        <div class="hero-handle">@ObliviateRickLin</div>
+      </div>
+    </div>
+    <h1 class="hero-title">
+      I build <em>agents</em> <span class="dim">that ship to</span> production.
+    </h1>
+    <p class="hero-desc">
+      Agent engineer at <strong style="font-weight:600">Tencent CDG</strong>, building multi-agent LangGraph workflows
+      that operate across 1,000+ database tables. Previously cofounded an AI startup with a multi-agent product
+      serving 5K weekly users. UCLA MS, graduating 2026.
+    </p>
+    <div class="pill-row">
+      <span class="pill"><span class="dot"></span> Currently @ Tencent</span>
+      <span class="pill">Open to 2026 Agent / ML roles</span>
+      <span class="pill">EN · 中文</span>
+    </div>
+  </section>
+
+  <!-- ============ NOW (Tencent) ============ -->
+  <section class="card b-now">
+    <div class="now-logo">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Tencent · CDG Ad Department
+    </div>
+    <div class="now-title">Production multi-agent systems at WeChat scale.</div>
+    <div class="now-sub">Machine Learning Intern · since Jun 2025 · Shenzhen</div>
+    <ul class="now-bullets">
+      <li>Shipped <strong>LangGraph agent workflows</strong> automating PII anonymization across <strong>1,000+ DB tables</strong>, replacing weeks of manual review with an autonomous pipeline.</li>
+      <li>Designed real-time multi-objective optimization for ad ranking — agents coordinate eCPM, ad-load, and UX trade-offs under hard latency SLAs.</li>
+      <li>Built ETL on Hive + Spark ingesting <strong>1B+ daily events</strong> from WeChat, QQ Music &amp; Tencent Games — feeding both training and online inference.</li>
+    </ul>
+  </section>
+
+  <!-- ============ STATUS ============ -->
+  <a class="card b-status card-link" href="mailto:jinruilin@g.ucla.edu">
+    <div class="label" style="color: inherit;">Available</div>
+    <div class="status-line">Looking for full-time <strong style="background:linear-gradient(90deg,#ff7ac6,#21d4fd);-webkit-background-clip:text;background-clip:text;color:transparent">Agent Engineering</strong> roles starting summer 2026 →</div>
+    <div class="status-arrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+  </a>
+
+  <!-- ============ AGENT STACK ============ -->
+  <section class="card b-agent">
+    <div class="label">// Agent Stack</div>
+    <div class="agent-big">4yrs</div>
+    <div class="agent-sub">building with agent frameworks since LangChain v0</div>
+    <div class="agent-chips">
+      <span>LangGraph</span><span>LangChain</span><span>Tool-Use</span>
+      <span>Multi-Agent</span><span>RAG</span><span>Function Calling</span>
+      <span>Streamlit</span><span>FastAPI</span>
+    </div>
+  </section>
+
+  <!-- ============ STARTUP ============ -->
+  <a class="card b-startup card-link" href="#startup">
+    <div class="label">// Cofounder</div>
+    <div class="startup-title">AIJobTech</div>
+    <div class="startup-desc">Multi-agent LangChain product matching candidates to roles in real time. HK Govt IDEATION-funded.</div>
+    <div class="startup-grid">
+      <div class="startup-stat"><div class="v">5K</div><div class="k">Weekly users</div></div>
+      <div class="startup-stat"><div class="v">60%</div><div class="k">W1 retention</div></div>
+      <div class="startup-stat"><div class="v">1.5K+</div><div class="k">Req/peak</div></div>
+      <div class="startup-stat"><div class="v">HKD 100K</div><div class="k">Funding</div></div>
+    </div>
+  </a>
+
+  <!-- ============ RESEARCH ============ -->
+  <section class="card b-research">
+    <div class="label">// Side Research</div>
+    <div class="research-title">Hyperbolic LLM Scaling Laws</div>
+    <div class="research-desc">
+      Training Qwen3 hyperbolic variants on OpenWebText, evaluating on MMLU / ARC.
+      Independent research with Yale collaborators · UCLA Hoffman2 cluster.
+    </div>
+    <div class="research-tags">
+      <span>Qwen3</span><span>Scaling Laws</span><span>SLURM</span><span>Multi-GPU</span>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="card b-projects">
+    <div class="proj-head-row">
+      <div class="proj-title-l">Open source</div>
+      <a class="proj-link-r" href="https://github.com/ObliviateRickLin?tab=repositories" target="_blank" rel="noopener">
+        All 29 repos →
+      </a>
+    </div>
+    <div class="proj-list">
+      <a class="proj-row" href="https://github.com/ObliviateRickLin/nano-two-tower-rec" target="_blank" rel="noopener">
+        <div class="proj-name-c">
+          <div class="nm">nano-two-tower-rec</div>
+          <div class="lg">Python · MIT</div>
+        </div>
+        <div class="proj-desc-c">Minimal readable implementation of a two-tower retrieval model. Built to demystify modern recsys.</div>
+        <div class="proj-meta-c"><span>★ 6</span><span class="arr">↗</span></div>
+      </a>
+      <a class="proj-row" href="https://github.com/ObliviateRickLin/LexNexus" target="_blank" rel="noopener">
+        <div class="proj-name-c">
+          <div class="nm">LexNexus</div>
+          <div class="lg">JavaScript · LLM</div>
+        </div>
+        <div class="proj-desc-c">Chrome extension using LLMs to translate English into natural Chinese-English mixed format.</div>
+        <div class="proj-meta-c"><span>★ 1</span><span class="arr">↗</span></div>
+      </a>
+      <a class="proj-row" href="https://github.com/ObliviateRickLin/Notion-Artifacts" target="_blank" rel="noopener">
+        <div class="proj-name-c">
+          <div class="nm">Notion-Artifacts</div>
+          <div class="lg">TypeScript</div>
+        </div>
+        <div class="proj-desc-c">Write, store, and embed interactive HTML/CSS/JS components into note-taking platforms.</div>
+        <div class="proj-meta-c"><span>★</span><span class="arr">↗</span></div>
+      </a>
+      <a class="proj-row" href="https://github.com/ObliviateRickLin/autoresearch-hyperbolic" target="_blank" rel="noopener">
+        <div class="proj-name-c">
+          <div class="nm">autoresearch-hyperbolic</div>
+          <div class="lg">Python · Agent</div>
+        </div>
+        <div class="proj-desc-c">Agent-driven research pipeline orchestrating experiments and auto-generating eval reports.</div>
+        <div class="proj-meta-c"><span>★</span><span class="arr">↗</span></div>
+      </a>
+      <a class="proj-row" href="https://github.com/ObliviateRickLin/transformer-kernel-icl" target="_blank" rel="noopener">
+        <div class="proj-name-c">
+          <div class="nm">transformer-kernel-icl</div>
+          <div class="lg">Python · Research</div>
+        </div>
+        <div class="proj-desc-c">Studying in-context learning through the lens of kernel methods — empirical companion repo.</div>
+        <div class="proj-meta-c"><span>★</span><span class="arr">↗</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="card b-stats">
+    <div class="label">// GitHub</div>
+    <div class="stat-grid-2">
+      <div><div class="v">29</div><div class="k">Public repos</div></div>
+      <div><div class="v">2021</div><div class="k">Joined</div></div>
+    </div>
+  </section>
+
+  <!-- ============ EDUCATION ============ -->
+  <section class="card b-edu">
+    <div class="label">// Education</div>
+    <div class="edu-row">
+      <div class="edu-school">UCLA MS Statistics &amp; DS</div>
+      <div class="edu-sub">w/ scholarship · expected Jun 2026</div>
+    </div>
+  </section>
+
+  <!-- ============ PAST EXPERIENCE ============ -->
+  <section class="card b-past">
+    <div class="label">// Earlier roles</div>
+    <div class="past-row">
+      <div class="past-logo">D</div>
+      <div class="past-info">
+        <div class="nm">Didi · Self-Driving</div>
+        <div class="rl">LoRA · Multimodal · 2023</div>
+      </div>
+    </div>
+    <div class="past-row">
+      <div class="past-logo">M</div>
+      <div class="past-info">
+        <div class="nm">Momenta · BYD R&amp;D</div>
+        <div class="rl">PyTorch · Clustering · 2022</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="card b-skills">
+    <div class="label">// Stack</div>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h5>Agents &amp; LLMs</h5>
+        <div class="skill-flex">
+          <span class="skill-tag">LangGraph</span>
+          <span class="skill-tag">LangChain</span>
+          <span class="skill-tag">Tool-Use</span>
+          <span class="skill-tag">RAG</span>
+          <span class="skill-tag">PyTorch</span>
+          <span class="skill-tag">Transformers</span>
+          <span class="skill-tag">LLaMA-Factory</span>
+          <span class="skill-tag">TRL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h5>Data &amp; Infra</h5>
+        <div class="skill-flex">
+          <span class="skill-tag">Hive</span>
+          <span class="skill-tag">Spark</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">AWS</span>
+          <span class="skill-tag">MySQL</span>
+          <span class="skill-tag">SLURM</span>
+          <span class="skill-tag">Multi-GPU</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h5>Languages</h5>
+        <div class="skill-flex">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Bash</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h5>Eval &amp; Stats</h5>
+        <div class="skill-flex">
+          <span class="skill-tag">A/B Testing</span>
+          <span class="skill-tag">Causal Inference</span>
+          <span class="skill-tag">Multi-Obj Opt</span>
+          <span class="skill-tag">Bootstrap</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOCATION ============ -->
+  <section class="card b-loc">
+    <div class="label">// Where</div>
+    <div class="loc-big">LA &nbsp;·&nbsp; Shenzhen</div>
+    <div class="loc-list">
+      <div class="loc-item">
+        <div class="loc-flag">🇺🇸</div>
+        <div class="loc-info"><div class="pl">Los Angeles, CA</div><div class="pr">UCLA · Westwood · current</div></div>
+      </div>
+      <div class="loc-item">
+        <div class="loc-flag">🇨🇳</div>
+        <div class="loc-info"><div class="pl">Shenzhen, China</div><div class="pr">Tencent CDG · summer 2025</div></div>
+      </div>
+      <div class="loc-item">
+        <div class="loc-flag">🇭🇰</div>
+        <div class="loc-info"><div class="pl">Hong Kong</div><div class="pr">AIJobTech · cofounder · ongoing</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="card b-cta">
+    <div class="cta-text">Need an agent engineer who's shipped to production?<br/>Let's talk.</div>
+    <div class="cta-btns">
+      <a class="cta-btn primary" href="mailto:jinruilin@g.ucla.edu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 4H2v16h20V4z"/><polyline points="22,6 12,13 2,6"/></svg>
+        jinruilin@g.ucla.edu
+      </a>
+      <a class="cta-btn" href="https://github.com/ObliviateRickLin" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.7-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+        @ObliviateRickLin
+      </a>
+      <a class="cta-btn" href="https://www.linkedin.com/in/jinrui-l-902467283/" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span>&copy; 2026 Jinrui Lin · built with HTML</span>
+  <span>last updated 2026-05-16</span>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme-bento');
+  if (saved) root.setAttribute('data-theme', saved);
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme-bento', next);
+  });
+</script>
+
+</body>
+</html>
